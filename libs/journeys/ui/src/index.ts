@@ -44,4 +44,5 @@ export {
   previousBlocksVar,
   treeBlocksVar
 } from './libs'
+export type { WrappersProps } from './components'
 export type { TreeBlock } from './libs'

@@ -10,6 +10,8 @@ import { ThemeName, ThemeMode } from '../../../../__generated__/globalTypes'
 import { FramePortal } from '../../FramePortal'
 import { DRAWER_WIDTH } from '../Drawer'
 import 'swiper/swiper.min.css'
+import { VideoWrapper } from './VideoWrapper'
+import { CardWrapper } from './CardWrapper'
 
 const EDGE_SLIDE_WIDTH = 24
 const MIN_SPACE_BETWEEN = 16
@@ -128,7 +130,10 @@ export function Canvas(): ReactElement {
                   themeMode={ThemeMode.light}
                 >
                   <Box sx={{ p: 1, height: '100%' }}>
-                    <BlockRenderer block={step} />
+                    <BlockRenderer
+                      block={step}
+                      wrappers={{ VideoWrapper, CardWrapper }}
+                    />
                   </Box>
                 </ThemeProvider>
               </FramePortal>
