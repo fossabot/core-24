@@ -115,19 +115,20 @@ export function RadioQuestion({
         )}
         {/* TODO: Only show if less than 12 total options */}
         {/* CHORE: Check case when there are no options in the list */}
-        {selectedBlock?.__typename === 'RadioQuestionBlock' && (
-          <RadioOption
-            __typename="RadioOptionBlock"
-            id={uuid()}
-            label="Add new item"
-            parentBlockId={blockId}
-            parentOrder={children?.length ?? 0}
-            key={'add-new-option'}
-            action={null}
-            onClick={handleAddOption}
-            children={[]}
-          />
-        )}
+        {selectedBlock?.__typename === 'RadioQuestionBlock' &&
+          children?.length < 12 && (
+            <RadioOption
+              __typename="RadioOptionBlock"
+              id={uuid()}
+              label="Add new item"
+              parentBlockId={blockId}
+              parentOrder={children?.length ?? 0}
+              key={'add-new-option'}
+              action={null}
+              onClick={handleAddOption}
+              children={[]}
+            />
+          )}
       </ButtonGroup>
     </Box>
   )

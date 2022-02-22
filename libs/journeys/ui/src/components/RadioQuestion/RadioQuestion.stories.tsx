@@ -133,4 +133,8 @@ Long.args = {
   children: longLabel
 }
 
+// TODO: add story with more than 12 options
+
+// TODO: add story with 0 options
+
 export default Demo as Meta
