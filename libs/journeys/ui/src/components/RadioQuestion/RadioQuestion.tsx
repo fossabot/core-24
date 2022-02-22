@@ -113,7 +113,6 @@ export function RadioQuestion({
               />
             )
         )}
-        {/* TODO: Only show if less than 12 total options */}
         {/* CHORE: Check case when there are no options in the list */}
         {selectedBlock?.__typename === 'RadioQuestionBlock' &&
           children?.length < 12 && (

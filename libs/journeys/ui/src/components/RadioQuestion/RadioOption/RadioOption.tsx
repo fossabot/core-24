@@ -57,27 +57,34 @@ export function RadioOption({
     }
   }
 
+  const selectedAction: React.MouseEventHandler =
+    label === 'Add new item'
+      ? handleClick
+      : selectedBlock === undefined
+      ? handleClick
+      : handleSelectBlock
+
+  const selectedIcon: ReactElement =
+    label === 'Add new item' ? (
+      <AddCircleRoundedIcon
+        sx={{
+          fontSize: 24, // BUG: something is overriding this style
+          color: '#C52D3A'
+        }}
+      />
+    ) : selected ? (
+      <CheckCircleIcon data-testid="RadioOptionCheckCircleIcon" />
+    ) : (
+      <RadioButtonUncheckedIcon data-testid="RadioOptionRadioButtonUncheckedIcon" />
+    )
+
   return (
     <Button
       variant="contained"
       className={className}
       disabled={disabled}
-      // TODO: set action if adding a new block
-      onClick={selectedBlock === undefined ? handleClick : handleSelectBlock}
-      startIcon={
-        label === 'Add new item' ? (
-          <AddCircleRoundedIcon
-            sx={{
-              fontSize: 24, // BUG: something is overriding this style
-              color: '#C52D3A'
-            }}
-          />
-        ) : selected ? (
-          <CheckCircleIcon data-testid="RadioOptionCheckCircleIcon" />
-        ) : (
-          <RadioButtonUncheckedIcon data-testid="RadioOptionRadioButtonUncheckedIcon" />
-        )
-      }
+      onClick={selectedAction}
+      startIcon={selectedIcon}
       sx={{
         fontFamily: theme.typography.body2.fontFamily,
         fontSize: theme.typography.body2.fontSize,
