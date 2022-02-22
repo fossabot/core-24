@@ -4,6 +4,7 @@ import Button from '@mui/material/Button'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { useRouter } from 'next/router'
+import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded'
 import { TreeBlock, handleAction, useEditor, ActiveTab } from '../../..'
 import { RadioOptionFields } from './__generated__/RadioOptionFields'
 
@@ -61,9 +62,17 @@ export function RadioOption({
       variant="contained"
       className={className}
       disabled={disabled}
+      // TODO: set action if adding a new block
       onClick={selectedBlock === undefined ? handleClick : handleSelectBlock}
       startIcon={
-        selected ? (
+        label === 'Add new item' ? (
+          <AddCircleRoundedIcon
+            sx={{
+              fontSize: 24, // BUG: something is overriding this style
+              color: '#C52D3A'
+            }}
+          />
+        ) : selected ? (
           <CheckCircleIcon data-testid="RadioOptionCheckCircleIcon" />
         ) : (
           <RadioButtonUncheckedIcon data-testid="RadioOptionRadioButtonUncheckedIcon" />
