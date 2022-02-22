@@ -1,4 +1,4 @@
-import { ReactElement, MouseEvent } from 'react'
+import { ReactElement, MouseEvent, MouseEventHandler } from 'react'
 import { useTheme } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked'
@@ -57,7 +57,7 @@ export function RadioOption({
     }
   }
 
-  const selectedAction: React.MouseEventHandler =
+  const selectedAction: MouseEventHandler =
     label === 'Add new item'
       ? handleClick
       : selectedBlock === undefined
