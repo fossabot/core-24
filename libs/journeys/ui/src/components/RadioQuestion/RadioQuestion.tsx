@@ -7,6 +7,7 @@ import { useMutation, gql } from '@apollo/client'
 import { TreeBlock, useEditor, ActiveTab } from '../..'
 import { RadioOption } from './RadioOption'
 import { RadioQuestionResponseCreate } from './__generated__/RadioQuestionResponseCreate'
+import { RadioOptionBlockCreate } from './__generated__/RadioOptionBlockCreate'
 import { RadioQuestionFields } from './__generated__/RadioQuestionFields'
 
 export const RADIO_QUESTION_RESPONSE_CREATE = gql`
@@ -16,6 +17,15 @@ export const RADIO_QUESTION_RESPONSE_CREATE = gql`
     radioQuestionResponseCreate(input: $input) {
       id
       radioOptionBlockId
+    }
+  }
+`
+
+// This mutation needs to be moved into a wrapper, waiting for the pattern to be completed on another PR to continue.
+export const RADIO_OPTION_BLOCK_CREATE = gql`
+  mutation RadioOptionBlockCreate($input: RadioOptionBlockCreateInput!) {
+    radioOptionBlockCreate(input: $input) {
+      id
     }
   }
 `
@@ -34,6 +44,9 @@ export function RadioQuestion({
 }: RadioQuestionProps): ReactElement {
   const [radioQuestionResponseCreate, { data }] =
     useMutation<RadioQuestionResponseCreate>(RADIO_QUESTION_RESPONSE_CREATE)
+  const [radioOptionBlockCreate] = useMutation<RadioOptionBlockCreate>(
+    RADIO_OPTION_BLOCK_CREATE
+  )
 
   const handleClick = async (radioOptionBlockId: string): Promise<void> => {
     const id = uuid()
@@ -78,9 +91,51 @@ export function RadioQuestion({
     dispatch({ type: 'SetSelectedAttributeIdAction', id: undefined })
   }
 
-  function handleAddOption(): void {
-    // TODO: add mutation
-    console.log('add')
+  async function handleAddOption(): Promise<void> {
+    const { data } = await radioOptionBlockCreate({
+      variables: {
+        input: {
+          id: uuid(),
+          journeyId: '1',
+          parentBlockId: blockId,
+          label: 'New item'
+        }
+      },
+      update(cache, { data }) {
+        if (data?.radioOptionBlockCreate != null) {
+          cache.modify({
+            id: cache.identify({
+              __typename: 'Journey',
+              id: '1'
+            }),
+            fields: {
+              blocks(existingBlockRefs = []) {
+                const newBlockRef = cache.writeFragment({
+                  data: data.radioOptionBlockCreate,
+                  fragment: gql`
+                    fragment NewBlock on Block {
+                      id
+                    }
+                  `
+                })
+                return [...existingBlockRefs, newBlockRef]
+              }
+            }
+          })
+        }
+      }
+    })
+    // BUG: New optionBlock is not being selected
+    if (data?.radioOptionBlockCreate != null) {
+      dispatch({
+        type: 'SetSelectedBlockByIdAction',
+        id: data.radioOptionBlockCreate.id
+      })
+      dispatch({
+        type: 'SetActiveTabAction',
+        activeTab: ActiveTab.Properties
+      })
+    }
   }
 
   return (
@@ -114,6 +169,7 @@ export function RadioQuestion({
             )
         )}
         {/* CHORE: Check case when there are no options in the list */}
+        {/* BUG: The add option shows on other RadioQuestion blocks when browsing cards */}
         {selectedBlock?.__typename === 'RadioQuestionBlock' &&
           children?.length < 12 && (
             <RadioOption
@@ -129,6 +185,7 @@ export function RadioQuestion({
             />
           )}
       </ButtonGroup>
+      {/* BUG: Need some padding at the bottom of this element */}
     </Box>
   )
 }
