@@ -6,17 +6,21 @@ import {
   withAuthUserTokenSSR
 } from 'next-firebase-auth'
 import { NextSeo } from 'next-seo'
+import Container from '@mui/material/Container'
 import { addApolloState, initializeApollo } from '../src/libs/apolloClient'
 import { PageWrapper } from '../src/components/PageWrapper'
+import { Videos } from '../src/components/Videos/Videos'
 
 function IndexPage(): ReactElement {
   const AuthUser = useAuthUser()
 
   return (
     <>
-      <NextSeo title="Journeys" />
-      <PageWrapper title="Journeys" AuthUser={AuthUser}>
-        <></>
+      <NextSeo title="Watch Admin" />
+      <PageWrapper title="Watch Admin" AuthUser={AuthUser}>
+        <Container>
+          <Videos />
+        </Container>
       </PageWrapper>
     </>
   )
