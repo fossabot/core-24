@@ -14,7 +14,6 @@ import { GetVideos_videos } from '../../../../../__generated__/GetVideos'
 
 interface VideoListListProps {
   videos: GetVideos_videos[]
-  variant?: 'small' | 'large' | undefined
   loading: boolean
   isEnd: boolean
   onLoadMore: () => Promise<void>
@@ -23,7 +22,6 @@ interface VideoListListProps {
 export function VideoListList({
   videos,
   loading = false,
-  variant = 'large',
   isEnd,
   onLoadMore
 }: VideoListListProps): ReactElement {
@@ -52,14 +50,14 @@ export function VideoListList({
               {video.image != null && (
                 <Box>
                   <Box
-                    data-testid={`video-list-list-image-${variant}`}
+                    data-testid={`video-list-list-image-small`}
                     sx={{
                       justifySelf: 'end',
                       display: 'flex',
                       alignItems: 'flex-end',
                       justifyContent: 'flex-end',
-                      height: variant === 'small' ? 79 : 150,
-                      width: variant === 'small' ? 79 : 150,
+                      height: 79,
+                      width: 79,
                       borderRadius: 2,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center center',
@@ -98,8 +96,8 @@ export function VideoListList({
                   display: 'flex',
                   alignItems: 'flex-end',
                   justifyContent: 'flex-end',
-                  height: variant === 'small' ? 79 : 150,
-                  width: variant === 'small' ? 79 : 150,
+                  height: 79,
+                  width: 79,
                   borderRadius: 2,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center center',

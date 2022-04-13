@@ -3,8 +3,6 @@ import { ReactElement, useEffect, useState } from 'react'
 
 import { GetVideos } from '../../../../__generated__/GetVideos'
 import { VideosFilter } from '../../../../__generated__/globalTypes'
-import { VideoListCarousel } from './Carousel/VideoListCarousel'
-import { VideoListGrid } from './Grid/VideoListGrid'
 import { VideoListList } from './List/VideoListList'
 
 export const GET_VIDEOS = gql`
@@ -32,8 +30,6 @@ export const GET_VIDEOS = gql`
 
 interface VideoListProps {
   filter?: VideosFilter
-  layout?: 'grid' | 'carousel' | 'list'
-  variant?: 'small' | 'large'
 }
 
 function isAtEnd(count: number, limit: number, previousCount: number): boolean {
@@ -42,13 +38,11 @@ function isAtEnd(count: number, limit: number, previousCount: number): boolean {
 }
 
 export function VideoList({
-  layout = 'list',
-  filter = {},
-  variant = 'large'
+  filter = {}
 }: VideoListProps): ReactElement {
   const [isEnd, setIsEnd] = useState(false)
   const [previousCount, setPreviousCount] = useState(0)
-  const limit = layout === 'grid' ? 20 : 8
+  const limit = 100
   const { data, loading, fetchMore } = useQuery<GetVideos>(GET_VIDEOS, {
     variables: {
       where: filter,
@@ -73,31 +67,11 @@ export function VideoList({
   }
 
   return (
-    <>
-      {layout === 'carousel' && (
-        <VideoListCarousel
-          videos={data?.videos ?? []}
-          onLoadMore={handleLoadMore}
-          loading={loading}
-        />
-      )}
-      {layout === 'grid' && (
-        <VideoListGrid
-          videos={data?.videos ?? []}
-          onLoadMore={handleLoadMore}
-          loading={loading}
-          isEnd={isEnd}
-        />
-      )}
-      {layout === 'list' && (
-        <VideoListList
-          videos={data?.videos ?? []}
-          onLoadMore={handleLoadMore}
-          loading={loading}
-          isEnd={isEnd}
-          variant={variant}
-        />
-      )}
-    </>
+    <VideoListList
+      videos={data?.videos ?? []}
+      onLoadMore={handleLoadMore}
+      loading={loading}
+      isEnd={isEnd}
+    />
   )
 }
