@@ -8,7 +8,7 @@ const withImages = require('next-images')
  **/
 const nextConfig = {
   images: {
-    domains: []
+    domains: ['d1wl257kev7hsz.cloudfront.net']
   },
   nx: {
     // Set this to true if you would like to to use SVGR

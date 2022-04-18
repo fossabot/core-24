@@ -11,19 +11,39 @@ import { VideosFilter, VideoType } from "./globalTypes";
 
 export interface GetVideos_videos_snippet {
   __typename: "Translation";
-  primary: boolean;
   value: string;
 }
 
 export interface GetVideos_videos_title {
   __typename: "Translation";
-  primary: boolean;
+  value: string;
+}
+
+export interface GetVideos_videos_seoTitle {
+  __typename: "Translation";
+  value: string;
+}
+
+export interface GetVideos_videos_description {
+  __typename: "Translation";
   value: string;
 }
 
 export interface GetVideos_videos_variant {
   __typename: "VideoVariant";
   duration: number;
+}
+
+export interface GetVideos_videos_episodes {
+  __typename: "Video";
+  id: string;
+  permalink: string;
+  noIndex: boolean | null;
+}
+
+export interface GetVideos_videos_imageAlt {
+  __typename: "Translation";
+  value: string;
 }
 
 export interface GetVideos_videos {
@@ -33,12 +53,14 @@ export interface GetVideos_videos {
   image: string | null;
   snippet: GetVideos_videos_snippet[];
   title: GetVideos_videos_title[];
+  seoTitle: GetVideos_videos_seoTitle[];
+  description: GetVideos_videos_description[];
   variant: GetVideos_videos_variant | null;
-  /**
-   * Episodes are child videos, currently only found in a playlist type
-   */
-  episodeIds: string[];
+  episodes: GetVideos_videos_episodes[];
   permalink: string;
+  noIndex: boolean | null;
+  imageAlt: GetVideos_videos_imageAlt[];
+  primaryLanguageId: string;
 }
 
 export interface GetVideos {

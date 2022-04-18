@@ -3,25 +3,22 @@ import { gql, useQuery } from '@apollo/client'
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
-import { GetLanguages } from '../../../__generated__/GetLanguages'
+import { GetTags } from '../../../__generated__/GetTags'
 
 
-export const GET_LANGUAGES = gql`
-  query GetLanguages {
-    languages {
-      bcp47
+export const GET_TAGS = gql`
+  query GetTags {
+    videoTags {
       id
-      iso3
-      name {
-        primary
+      title {
         value
       }
     }
   }
 `
 
-export function LanguageSearch({onChange}): ReactElement {
-  const { data, loading } = useQuery<GetLanguages>(GET_LANGUAGES)
+export function TagSearch({onChange}): ReactElement {
+  const { data, loading } = useQuery<GetTags>(GET_TAGS)
 
   return (
     <>
@@ -29,14 +26,14 @@ export function LanguageSearch({onChange}): ReactElement {
         id="language-search"
         sx={{ width: 280 }}
         onChange={onChange}
-        isOptionEqualToValue={(option, value) => option.bcp47 === value.bcp47}
-        getOptionLabel={(option) => `${option.bcp47 ?? ''} | ${option.name.map(name => ` ${name.value}`).toString()}`}
-        options={data?.languages ?? []}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
+        getOptionLabel={(option) => `${option.id} - ${option.title.map(title => `${title.value}`).toString()}`}
+        options={data?.videoTags ?? []}
         loading={loading}
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Filter by Audio Language"
+            label="Filter by Tag"
             InputProps={{
               ...params.InputProps,
               endAdornment: (
