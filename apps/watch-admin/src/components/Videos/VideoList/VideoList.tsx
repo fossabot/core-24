@@ -22,6 +22,9 @@ interface Column {
     | 'duration'
     | 'episodeIds'
     | 'permalink'
+    | 'noIndex'
+    | 'seoTitle'
+    | 'description'
   label: string
   minWidth: number
 }
@@ -30,6 +33,8 @@ const columns: readonly Column[] = [
   { id: 'image', label: 'Image', minWidth: 160 },
   { id: 'id', label: 'Id', minWidth: 80 },
   { id: 'title', label: 'Titles', minWidth: 160 },
+  { id: 'seoTitle', label: 'SEO Titles', minWidth: 160 },
+  { id: 'description', label: 'Descriptions', minWidth: 160 },
   { id: 'snippet', label: 'Snippets', minWidth: 240 },
   { id: 'type', label: 'Type', minWidth: 60 },
   { id: 'duration', label: 'Duration', minWidth: 40 },
@@ -41,6 +46,11 @@ const columns: readonly Column[] = [
   {
     id: 'permalink',
     label: 'Permalink',
+    minWidth: 40
+  },
+  {
+    id: 'noIndex',
+    label: 'No Index?',
     minWidth: 40
   }
 ]
@@ -75,6 +85,7 @@ export const GET_VIDEOS = gql`
       noIndex
       imageAlt {
         value
+        primary
       }
       primaryLanguageId
     }
@@ -85,35 +96,13 @@ interface VideoListProps {
 }
 
 export function VideoList({ filter = {} }: VideoListProps): ReactElement {
-  const [limit, setLimit] = useState(1000)
-  const [offset, setOffset] = useState(0)
   const { data, fetchMore } = useQuery<GetVideos>(GET_VIDEOS, {
     variables: {
       where: filter,
-      offset: offset,
-      limit: limit
+      offset: 0,
+      limit: 1000
     }
   })
-
-  const handleSetOffset = async (_e, offset): Promise<void> => {
-    setOffset(offset)
-    await fetchMore({
-      variables: {
-        offset: offset
-      }
-    })
-  }
-
-  const handleSetLimit = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ): Promise<void> => {
-    setLimit(parseInt(event.target.value, 10))
-    await fetchMore({
-      variables: {
-        limit: limit
-      }
-    })
-  }
 
   return (
     <Paper
@@ -136,13 +125,15 @@ export function VideoList({ filter = {} }: VideoListProps): ReactElement {
           </TableHead>
           <TableBody>
             {(data?.videos ?? []).map((video, index) => {
-              const title = video.title.find((title) => title.primary)?.value
+              const imageAlt = video.imageAlt.find(
+                (imageAlt) => imageAlt.primary
+              )?.value
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                   <TableCell key={`${index}-cell0`}>
                     <Image
                       src={video.image ?? ''}
-                      alt={title}
+                      alt={imageAlt}
                       height="90"
                       width="160"
                     />
@@ -153,6 +144,14 @@ export function VideoList({ filter = {} }: VideoListProps): ReactElement {
                   <TableCell key={`${index}-cell2`}>
                     {video.title.map((title) => title.value).join(', ')}
                   </TableCell>
+                  <TableCell key={`${index}-cell25`}>
+                    {video.seoTitle.map((title) => title.value).join(', ')}
+                  </TableCell>
+                  <TableCell key={`${index}-cell28`}>
+                    {video.description
+                      .map((description) => description.value)
+                      .join(', ')}
+                  </TableCell>
                   <TableCell key={`${index}-cell3`}>
                     {video.snippet.map((snippet) => snippet.value).join(', ')}
                   </TableCell>
@@ -161,10 +160,15 @@ export function VideoList({ filter = {} }: VideoListProps): ReactElement {
                     {video.variant?.duration}
                   </TableCell>
                   <TableCell key={`${index}-cell6`}>
-                    {video.episodeIds.join(', ')}
+                    {video.episodes
+                      .map((episode) => `${episode.id}`)
+                      .join(', ')}
                   </TableCell>
                   <TableCell key={`${index}-cell7`}>
                     {video.permalink}
+                  </TableCell>
+                  <TableCell key={`${index}-cell7`}>
+                    {video.noIndex ? 'No Index' : ''}
                   </TableCell>
                 </TableRow>
               )
@@ -172,15 +176,6 @@ export function VideoList({ filter = {} }: VideoListProps): ReactElement {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25, 100, 1000]}
-        component="div"
-        count={10000000}
-        rowsPerPage={limit}
-        page={offset}
-        onPageChange={handleSetOffset}
-        onRowsPerPageChange={handleSetLimit}
-      />
     </Paper>
   )
 }

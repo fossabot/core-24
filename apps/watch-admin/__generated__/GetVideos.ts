@@ -44,6 +44,7 @@ export interface GetVideos_videos_episodes {
 export interface GetVideos_videos_imageAlt {
   __typename: "Translation";
   value: string;
+  primary: boolean;
 }
 
 export interface GetVideos_videos {
