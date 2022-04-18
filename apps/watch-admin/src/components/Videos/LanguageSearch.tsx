@@ -1,10 +1,9 @@
 import React, { ReactElement } from 'react'
 import { gql, useQuery } from '@apollo/client'
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
+import CircularProgress from '@mui/material/CircularProgress'
 import { GetLanguages } from '../../../__generated__/GetLanguages'
-
 
 export const GET_LANGUAGES = gql`
   query GetLanguages {
@@ -20,7 +19,7 @@ export const GET_LANGUAGES = gql`
   }
 `
 
-export function LanguageSearch({onChange}): ReactElement {
+export function LanguageSearch({ onChange }): ReactElement {
   const { data, loading } = useQuery<GetLanguages>(GET_LANGUAGES)
 
   return (
@@ -30,7 +29,11 @@ export function LanguageSearch({onChange}): ReactElement {
         sx={{ width: 280 }}
         onChange={onChange}
         isOptionEqualToValue={(option, value) => option.bcp47 === value.bcp47}
-        getOptionLabel={(option) => `${option.bcp47 ?? ''} | ${option.name.map(name => ` ${name.value}`).toString()}`}
+        getOptionLabel={(option) =>
+          `${option.bcp47 ?? ''} | ${option.name
+            .map((name) => ` ${name.value}`)
+            .toString()}`
+        }
         options={data?.languages ?? []}
         loading={loading}
         renderInput={(params) => (
@@ -41,10 +44,12 @@ export function LanguageSearch({onChange}): ReactElement {
               ...params.InputProps,
               endAdornment: (
                 <React.Fragment>
-                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                  {loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
                   {params.InputProps.endAdornment}
                 </React.Fragment>
-              ),
+              )
             }}
           />
         )}
