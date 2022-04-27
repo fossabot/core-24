@@ -47,3 +47,8 @@ Thumbs.db
 
 # nx generated files
 migrations.json
+
+# blackbox
+/.blackbox/pubring.gpg~
+/.blackbox/pubring.kbx~
+/.blackbox/secring.gpg

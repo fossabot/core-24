@@ -15,5 +15,8 @@ npm install -g @nestjs/cli@^8.1.5
 # install Rover CLI tool
 ./tools/scripts/install-rover.sh
 
+# install blackbox
+./tools/scripts/install-blackbox.sh
+
 # install all dependencies
 npm i
