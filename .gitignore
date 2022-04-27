@@ -52,3 +52,7 @@ migrations.json
 /.blackbox/pubring.gpg~
 /.blackbox/pubring.kbx~
 /.blackbox/secring.gpg
+/apps/journeys-admin/.env.development
+/apps/journeys-admin/.env.production
+/apps/journeys/.env.production
+/apps/journeys/.env.development
