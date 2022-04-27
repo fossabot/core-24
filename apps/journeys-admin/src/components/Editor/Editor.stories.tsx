@@ -217,11 +217,21 @@ const blocks: GetJourney_journey_blocks[] = [
     variant: TypographyVariant.h6
   },
   {
+    id: 'typographyBlockId1',
+    __typename: 'TypographyBlock',
+    parentBlockId: 'card2.id',
+    parentOrder: 1,
+    align: null,
+    color: null,
+    content: 'What is Christianity to you?',
+    variant: TypographyVariant.h3
+  },
+  {
     id: 'radioQuestion1.id',
     __typename: 'RadioQuestionBlock',
     parentBlockId: 'card2.id',
-    parentOrder: 1,
-    label: 'What is Christianity to you?',
+    parentOrder: 2,
+    label: '',
     description: ''
   },
   {
@@ -301,11 +311,21 @@ const blocks: GetJourney_journey_blocks[] = [
     variant: TypographyVariant.h6
   },
   {
+    id: 'typographyBlockId1',
+    __typename: 'TypographyBlock',
+    parentBlockId: 'card3.id',
+    parentOrder: 1,
+    align: null,
+    color: null,
+    content: 'Do you need to change to be good enough for God?',
+    variant: TypographyVariant.h3
+  },
+  {
     id: 'radioQuestion2.id',
     __typename: 'RadioQuestionBlock',
     parentBlockId: 'card3.id',
-    parentOrder: 1,
-    label: 'Do you need to change to be good enough for God?',
+    parentOrder: 2,
+    label: '',
     description: ''
   },
   {
@@ -363,6 +383,14 @@ const blocks: GetJourney_journey_blocks[] = [
     video: {
       __typename: 'Video',
       id: '2_0-FallingPlates',
+      title: [
+        {
+          __typename: 'Translation',
+          value: 'FallingPlates'
+        }
+      ],
+      image:
+        'https://d1wl257kev7hsz.cloudfront.net/cinematics/2_0-FallingPlates.mobileCinematicHigh.jpg',
       variant: {
         __typename: 'VideoVariant',
         id: '2_0-FallingPlates-529',
@@ -371,8 +399,19 @@ const blocks: GetJourney_journey_blocks[] = [
     },
     startAt: null,
     endAt: null,
-    posterBlockId: null,
-    fullsize: null
+    fullsize: null,
+    posterBlockId: 'posterBlockId'
+  },
+  {
+    id: 'posterBlockId',
+    __typename: 'ImageBlock',
+    src: 'https://images.unsplash.com/photo-1508363778367-af363f107cbb?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=chester-wade-hLP7lVm4KUE-unsplash.jpg&w=1920',
+    alt: 'random image from unsplash',
+    width: 1600,
+    height: 1067,
+    blurhash: 'L9AS}j^-0dVC4Tq[=~PATeXSV?aL',
+    parentBlockId: 'video1.id',
+    parentOrder: 0
   },
   {
     id: 'step5.id',
@@ -512,30 +551,13 @@ const blocks: GetJourney_journey_blocks[] = [
   }
 ]
 
-const Template: Story = () => (
+const Template: Story = (args) => (
   <MockedProvider>
-    <Editor
-      journey={{
-        __typename: 'Journey',
-        id: 'journeyId',
-        themeName: ThemeName.base,
-        themeMode: ThemeMode.light,
-        title: 'NUA Journey: Ep.3 – Decision',
-        slug: 'nua-journey-ep-3-decision',
-        description: 'my cool journey',
-        locale: 'en-US',
-        status: JourneyStatus.draft,
-        createdAt: '2021-11-19T12:34:56.647Z',
-        publishedAt: null,
-        primaryImageBlock: null,
-        userJourneys: [],
-        blocks
-      }}
-    >
+    <Editor journey={args.journey}>
       <PageWrapper
-        title="NUA Journey: Ep.3 – Decision"
+        title={args.journey?.title ?? 'Edit Journey'}
         showDrawer
-        Menu={<EditToolbar />}
+        menu={<EditToolbar />}
         backHref="/journeys/nua-journey-ep-3-decision"
       >
         <JourneyEdit />
@@ -545,5 +567,28 @@ const Template: Story = () => (
 )
 
 export const Default = Template.bind({})
+Default.args = {
+  journey: {
+    __typename: 'Journey',
+    id: 'journeyId',
+    themeName: ThemeName.base,
+    themeMode: ThemeMode.light,
+    title: 'NUA Journey: Ep.3 – Decision',
+    slug: 'nua-journey-ep-3-decision',
+    description: 'my cool journey',
+    languageId: '529',
+    status: JourneyStatus.draft,
+    createdAt: '2021-11-19T12:34:56.647Z',
+    publishedAt: null,
+    primaryImageBlock: null,
+    userJourneys: [],
+    blocks
+  }
+}
+
+export const Loading = Template.bind({})
+Loading.args = {
+  journey: undefined
+}
 
 export default EditorStory as Meta

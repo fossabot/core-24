@@ -231,9 +231,20 @@ const steps: Array<TreeBlock<StepBlock>> = [
             height: 1080,
             alt: 'random image from unsplash',
             parentBlockId: 'card2.id',
-            parentOrder: 0,
+            parentOrder: null,
             children: [],
             blurhash: 'L;KRQa-Rs-kA}ot4bZj@SMR,WWj@'
+          },
+          {
+            id: 'typographyBlockId1',
+            __typename: 'TypographyBlock',
+            parentBlockId: 'card2.id',
+            parentOrder: 0,
+            align: null,
+            color: null,
+            content: 'if it’s true...',
+            variant: TypographyVariant.h6,
+            children: []
           },
           {
             id: 'typographyBlockId1',
@@ -242,8 +253,8 @@ const steps: Array<TreeBlock<StepBlock>> = [
             parentOrder: 1,
             align: null,
             color: null,
-            content: 'if it’s true...',
-            variant: TypographyVariant.h6,
+            content: 'What is Christianity to you?',
+            variant: TypographyVariant.h3,
             children: []
           },
           {
@@ -251,7 +262,7 @@ const steps: Array<TreeBlock<StepBlock>> = [
             __typename: 'RadioQuestionBlock',
             parentBlockId: 'card2.id',
             parentOrder: 2,
-            label: 'What is Christianity to you?',
+            label: '',
             description: '',
             children: [
               {
@@ -326,9 +337,20 @@ const steps: Array<TreeBlock<StepBlock>> = [
             height: 1080,
             alt: 'random image from unsplash',
             parentBlockId: 'card3.id',
-            parentOrder: 0,
+            parentOrder: null,
             children: [],
             blurhash: 'L3CZt$_NyX4n=|?b00Ip8_IV00IA'
+          },
+          {
+            id: 'typographyBlockId1',
+            __typename: 'TypographyBlock',
+            parentBlockId: 'card3.id',
+            parentOrder: 0,
+            align: null,
+            color: null,
+            content: 'What do you think?',
+            variant: TypographyVariant.h6,
+            children: []
           },
           {
             id: 'typographyBlockId1',
@@ -337,8 +359,8 @@ const steps: Array<TreeBlock<StepBlock>> = [
             parentOrder: 1,
             align: null,
             color: null,
-            content: 'What do you think?',
-            variant: TypographyVariant.h6,
+            content: 'Do you need to change to be good enough for God?',
+            variant: TypographyVariant.h3,
             children: []
           },
           {
@@ -346,7 +368,7 @@ const steps: Array<TreeBlock<StepBlock>> = [
             __typename: 'RadioQuestionBlock',
             parentBlockId: 'card3.id',
             parentOrder: 2,
-            label: 'Do you need to change to be good enough for God?',
+            label: '',
             description: '',
             children: [
               {
@@ -511,6 +533,14 @@ const steps: Array<TreeBlock<StepBlock>> = [
             video: {
               __typename: 'Video',
               id: '2_0-FallingPlates',
+              title: [
+                {
+                  __typename: 'Translation',
+                  value: 'FallingPlates'
+                }
+              ],
+              image:
+                'https://d1wl257kev7hsz.cloudfront.net/cinematics/2_0-FallingPlates.mobileCinematicHigh.jpg',
               variant: {
                 __typename: 'VideoVariant',
                 id: '2_0-FallingPlates-529',
@@ -582,6 +612,14 @@ const steps: Array<TreeBlock<StepBlock>> = [
             video: {
               __typename: 'Video',
               id: '2_0-FallingPlates',
+              title: [
+                {
+                  __typename: 'Translation',
+                  value: 'FallingPlates'
+                }
+              ],
+              image:
+                'https://d1wl257kev7hsz.cloudfront.net/cinematics/2_0-FallingPlates.mobileCinematicHigh.jpg',
               variant: {
                 __typename: 'VideoVariant',
                 id: '2_0-FallingPlates-529',
@@ -614,7 +652,10 @@ const steps: Array<TreeBlock<StepBlock>> = [
 ]
 
 const Template: Story = ({ ...args }) => {
-  const [selected, setSelectedStep] = useState<TreeBlock<StepBlock>>(steps[0])
+  const [selected, setSelectedStep] = useState<TreeBlock<StepBlock>>(
+    args.steps?.[0]
+  )
+
   return (
     <MockedProvider>
       <JourneyProvider
@@ -629,7 +670,7 @@ const Template: Story = ({ ...args }) => {
         <CardPreview
           onSelect={(step) => setSelectedStep(step)}
           selected={selected}
-          steps={args.steps ?? steps}
+          steps={args.steps}
           showAddButton={args.showAddButton}
         />
       </JourneyProvider>
@@ -638,10 +679,19 @@ const Template: Story = ({ ...args }) => {
 }
 
 export const Default = Template.bind({})
+Default.args = {
+  steps
+}
 
 export const AddButton = Template.bind({})
 AddButton.args = {
+  steps,
   showAddButton: true
+}
+
+export const Loading = Template.bind({})
+Loading.args = {
+  steps: undefined
 }
 
 export default CardPreviewStory as Meta
