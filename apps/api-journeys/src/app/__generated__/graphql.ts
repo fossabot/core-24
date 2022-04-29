@@ -324,6 +324,10 @@ export class VideoBlockUpdateInput {
     fullsize?: Nullable<boolean>;
 }
 
+export class JourneysFilter {
+    featured?: Nullable<boolean>;
+}
+
 export class JourneyCreateInput {
     id?: Nullable<string>;
     title: string;
@@ -424,6 +428,7 @@ export class Journey {
     description?: Nullable<string>;
     slug: string;
     publishedAt?: Nullable<DateTime>;
+    featuredAt?: Nullable<DateTime>;
     createdAt: DateTime;
     status: JourneyStatus;
     seoTitle?: Nullable<string>;
@@ -574,6 +579,7 @@ export class VideoBlock implements Block {
     video?: Nullable<Video>;
     videoId?: Nullable<string>;
     videoVariantLanguageId?: Nullable<string>;
+    action?: Nullable<Action>;
 }
 
 export class VideoTriggerBlock implements Block {
@@ -712,7 +718,7 @@ export abstract class IQuery {
 
     abstract adminJourney(id: string, idType?: Nullable<IdType>): Nullable<Journey> | Promise<Nullable<Journey>>;
 
-    abstract journeys(): Journey[] | Promise<Journey[]>;
+    abstract journeys(where?: Nullable<JourneysFilter>): Journey[] | Promise<Journey[]>;
 
     abstract journey(id: string, idType?: Nullable<IdType>): Nullable<Journey> | Promise<Nullable<Journey>>;
 }

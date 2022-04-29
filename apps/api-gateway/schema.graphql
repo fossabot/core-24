@@ -306,6 +306,7 @@ type Journey
   blocks: [Block!] @join__field(graph: JOURNEYS)
   createdAt: DateTime! @join__field(graph: JOURNEYS)
   description: String @join__field(graph: JOURNEYS)
+  featuredAt: DateTime @join__field(graph: JOURNEYS)
   id: ID! @join__field(graph: JOURNEYS)
   language: Language! @join__field(graph: JOURNEYS)
   primaryImageBlock: ImageBlock @join__field(graph: JOURNEYS)
@@ -341,6 +342,10 @@ input JourneyCreateInput {
   themeMode: ThemeMode
   themeName: ThemeName
   title: String!
+}
+
+input JourneysFilter {
+  featured: Boolean
 }
 
 enum JourneyStatus {
@@ -465,8 +470,9 @@ input NavigateToJourneyActionInput {
 type Query {
   adminJourney(id: ID!, idType: IdType): Journey @join__field(graph: JOURNEYS)
   adminJourneys: [Journey!]! @join__field(graph: JOURNEYS)
+  episodes(idType: IdType, limit: Int, offset: Int, playlistId: ID!, where: VideosFilter): [Video!]! @join__field(graph: VIDEOS)
   journey(id: ID!, idType: IdType): Journey @join__field(graph: JOURNEYS)
-  journeys: [Journey!]! @join__field(graph: JOURNEYS)
+  journeys(where: JourneysFilter): [Journey!]! @join__field(graph: JOURNEYS)
   language(id: ID!): Language @join__field(graph: LANGUAGES)
   languages(limit: Int, offset: Int): [Language!]! @join__field(graph: LANGUAGES)
   me: User @join__field(graph: USERS)
@@ -731,7 +737,7 @@ type Video
   image: String @join__field(graph: VIDEOS)
   imageAlt(languageId: ID, primary: Boolean): [Translation!]! @join__field(graph: VIDEOS)
   noIndex: Boolean @join__field(graph: VIDEOS)
-  permalink: String! @join__field(graph: VIDEOS)
+  permalinks: [Translation!]! @join__field(graph: VIDEOS)
   primaryLanguageId: ID! @join__field(graph: VIDEOS)
   seoTitle(languageId: ID, primary: Boolean): [Translation!]! @join__field(graph: VIDEOS)
   snippet(languageId: ID, primary: Boolean): [Translation!]! @join__field(graph: VIDEOS)
@@ -743,6 +749,8 @@ type Video
 }
 
 type VideoBlock implements Block {
+  """action that should be performed when the video ends"""
+  action: Action
   autoplay: Boolean
 
   """endAt dictates at which point of time the video should end"""
