@@ -19,7 +19,6 @@ import { useJourney } from '../../../libs/context'
 import { ThemeName, ThemeMode } from '../../../../__generated__/globalTypes'
 import { InlineEditWrapper } from './InlineEditWrapper'
 import { SelectableWrapper } from './SelectableWrapper'
-import { VideoWrapper } from './VideoWrapper'
 
 const EDGE_SLIDE_WIDTH = 24
 const MIN_SPACE_BETWEEN = 16
@@ -139,7 +138,12 @@ export function Canvas(): ReactElement {
                       step.id === selectedStep?.id ? 'none' : 'auto'
                   }}
                 />
-                <FramePortal width={356} height={536}>
+                <FramePortal
+                  width={356}
+                  height={536}
+                  frameBorder="0"
+                  allowFullScreen
+                >
                   <ThemeProvider
                     themeName={journey?.themeName ?? ThemeName.base}
                     themeMode={journey?.themeMode ?? ThemeMode.light}
@@ -153,8 +157,7 @@ export function Canvas(): ReactElement {
                           ButtonWrapper: InlineEditWrapper,
                           RadioQuestionWrapper: InlineEditWrapper,
                           RadioOptionWrapper: InlineEditWrapper,
-                          SignUpWrapper: InlineEditWrapper,
-                          VideoWrapper
+                          SignUpWrapper: InlineEditWrapper
                         }}
                       />
                     </Box>

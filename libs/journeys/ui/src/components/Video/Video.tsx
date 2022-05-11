@@ -13,6 +13,8 @@ import Box from '@mui/material/Box'
 import { useTheme } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
 import VideocamRounded from '@mui/icons-material/VideocamRounded'
+// import IconButton from '@mui/material/IconButton'
+// import PlayCircleFilledWhiteRounded from '@mui/icons-material/PlayCircleFilledWhiteRounded'
 import { TreeBlock, useEditor, blurImage } from '../..'
 import { VideoPlayEventStateEnum } from '../../../__generated__/globalTypes'
 import { ImageFields } from '../Image/__generated__/ImageFields'
@@ -48,6 +50,7 @@ export function Video({
     VIDEO_PLAY_EVENT_CREATE
   )
   const [loading, setLoading] = useState(true)
+  // const [playButton, setPlayButton] = useState(true)
   const theme = useTheme()
   const {
     state: { selectedBlock }
@@ -62,11 +65,11 @@ export function Video({
   const blurBackground = useMemo(() => {
     return posterBlock != null
       ? blurImage(
-          posterBlock.width,
-          posterBlock.height,
-          posterBlock.blurhash,
-          theme.palette.background.paper
-        )
+        posterBlock.width,
+        posterBlock.height,
+        posterBlock.blurhash,
+        theme.palette.background.paper
+      )
       : undefined
   }, [posterBlock, theme])
 
@@ -118,7 +121,6 @@ export function Video({
       playerRef.current.on('ready', () => {
         playerRef.current?.currentTime(startAt ?? 0)
       })
-
       if (selectedBlock === undefined) {
         // Video jumps to new time and finishes loading - occurs on autoplay
         playerRef.current.on('seeked', () => {
@@ -145,6 +147,14 @@ export function Video({
             playerRef.current?.currentTime()
           )
         })
+      } else {
+        playerRef.current.on('mouseover', () => {
+          playerRef.current?.play()
+          setLoading(false)
+        })
+        playerRef.current.on('mouseout', () => {
+          playerRef.current?.pause()
+        })
       }
     }
   }, [
@@ -164,6 +174,13 @@ export function Video({
       playerRef.current?.pause()
     }
   }, [selectedBlock])
+
+  const handleCoverHover = (): void => {
+    if (selectedBlock !== undefined) {
+      setLoading(false)
+      playerRef.current?.play()
+    }
+  }
 
   return (
     <Box
@@ -220,6 +237,31 @@ export function Video({
           >
             <source src={video.variant.hls} type="application/x-mpegURL" />
           </video>
+          {/* {selectedBlock !== undefined && playButton && (
+            <IconButton
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                height: '100%',
+                fontSize: 70,
+              }}
+              onClick={(e) => {
+                e.stopPropagation()
+                setPlayButton(false)
+                playerRef.current?.play()
+              }}
+            >
+              <PlayCircleFilledWhiteRounded
+                fontSize="inherit"
+                sx={{
+                  color: VIDEO_FOREGROUND_COLOR,
+                  filter: `drop-shadow(-1px 0px 5px ${VIDEO_BACKGROUND_COLOR})`,
+                }}
+              />
+            </IconButton>
+          )} */}
           {children?.map(
             (option) =>
               option.__typename === 'VideoTriggerBlock' && (
@@ -263,6 +305,7 @@ export function Video({
           </Paper>
         </>
       )}
+
       {/* Lazy load higher res poster */}
       {posterBlock?.src != null && loading && (
         <NextImage
@@ -272,6 +315,7 @@ export function Video({
           blurDataURL={blurBackground ?? posterBlock.src}
           layout="fill"
           objectFit="cover"
+          onMouseEnter={handleCoverHover}
         />
       )}
     </Box>
