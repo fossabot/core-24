@@ -43,6 +43,9 @@ export const ManyCards = Template.bind({})
 ManyCards.args = {
   blocks: steps.concat(steps).concat(steps)
 }
+ManyCards.parameters = {
+  chromatic: { delay: 500 }
+}
 
 export const Loading = Template.bind({})
 Loading.args = {

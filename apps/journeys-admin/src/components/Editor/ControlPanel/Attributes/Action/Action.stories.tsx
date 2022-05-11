@@ -130,6 +130,9 @@ NavigateAction.args = {
   selectedStep: steps[3],
   selectedBlock: steps[3].children[0].children[2]
 }
+NavigateAction.parameters = {
+  chromatic: { diffThreshold: 0.2 }
+}
 
 export const NavigateToBlockAction = Template.bind({})
 NavigateToBlockAction.args = {
