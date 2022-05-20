@@ -63,14 +63,9 @@ export function Card({
   const blurUrl = useMemo(() => {
     return imageBlock != null &&
       (imageBlock.blurhash !== '' || videoBlock?.video?.variant?.hls != null)
-      ? blurImage(
-          imageBlock.width,
-          imageBlock.height,
-          imageBlock.blurhash,
-          cardColor
-        )
+      ? blurImage(imageBlock.blurhash, cardColor)
       : undefined
-  }, [imageBlock, cardColor, videoBlock?.video?.variant?.hls])
+  }, [imageBlock, cardColor, videoBlock])
 
   const renderedChildren = children
     .filter(({ id }) => id !== coverBlockId)

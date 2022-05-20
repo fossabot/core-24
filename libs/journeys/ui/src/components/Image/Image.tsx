@@ -18,7 +18,7 @@ export function Image({
   const theme = useTheme()
   const placeholderSrc = useMemo(() => {
     return blurhash != null
-      ? blurImage(width, height, blurhash, theme.palette.background.paper)
+      ? blurImage(blurhash, theme.palette.background.paper)
       : undefined
   }, [blurhash, width, height, theme])
 
