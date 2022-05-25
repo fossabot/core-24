@@ -26,6 +26,7 @@ import TagManager from 'react-gtm-module'
 import { JourneyViewEventCreate } from '../../../__generated__/JourneyViewEventCreate'
 import { BlockFields_CardBlock as CardBlock } from '../../../__generated__/BlockFields'
 import { JourneyProgress } from '../JourneyProgress'
+import { Chat } from './Chat'
 
 export const JOURNEY_VIEW_EVENT_CREATE = gql`
   mutation JourneyViewEventCreate($input: JourneyViewEventCreateInput!) {
@@ -288,6 +289,15 @@ export function Conductor({ blocks }: ConductorProps): ReactElement {
               />
             </IconButton>
           </Swiper>
+        </Box>
+        <Box
+          sx={{
+            px: `${edgeSlideWidth + gapBetweenSlides}px`,
+            py: 6,
+            pt: { lg: 0 }
+          }}
+        >
+          <Chat />
         </Box>
       </Stack>
     </Div100vh>
